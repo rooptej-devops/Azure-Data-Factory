@@ -24,6 +24,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -48,7 +49,8 @@
 						"value": "@activity('GetFileInfoRaw').output.childItems",
 						"type": "Expression"
 					},
-					"isSequential": true,
+					"isSequential": false,
+					"batchCount": 50,
 					"activities": [
 						{
 							"name": "CopyCsvFileInfoRaw",

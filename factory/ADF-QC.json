@@ -1,0 +1,15 @@
+{
+	"name": "ADF-QC",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Enabled",
+			"editable": true
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "23d4092e-5b78-489e-b358-3253e89d0921",
+		"tenantId": "773b19c6-8d48-4316-968d-d48355716f42"
+	}
+}

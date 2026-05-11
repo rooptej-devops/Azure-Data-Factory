@@ -65,7 +65,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"TargetFileName": {
-								"value": "@concat(replace(pipeline().parameters.PLPFileName,'.csv', ''),\n'_', formatDateTime(utcNow(), 'yyyymmdd'))",
+								"value": "@pipeline().parameters.PLPFileName",
 								"type": "Expression"
 							}
 						}

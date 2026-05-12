@@ -1,0 +1,30 @@
+{
+	"name": "DS_Src_ADLS_Binary_CSV",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_GEN2",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"SRC_File_Name": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "ADLS"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().SRC_File_Name",
+					"type": "Expression"
+				},
+				"folderPath": "Raw",
+				"fileSystem": "qc-container"
+			}
+		}
+	}
+}

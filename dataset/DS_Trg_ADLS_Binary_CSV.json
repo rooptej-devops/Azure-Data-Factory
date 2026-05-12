@@ -1,0 +1,30 @@
+{
+	"name": "DS_Trg_ADLS_Binary_CSV",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_GEN2",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"TRG_FILE_Name": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "ADLS"
+		},
+		"annotations": [],
+		"type": "Binary",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().TRG_FILE_Name",
+					"type": "Expression"
+				},
+				"folderPath": "Processed_CSV",
+				"fileSystem": "qc-container"
+			}
+		}
+	}
+}

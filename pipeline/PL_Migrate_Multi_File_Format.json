@@ -1,0 +1,330 @@
+{
+	"name": "PL_Migrate_Multi_File_Format",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get Metadata Raw",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "DS_SRC_ADLS_Metadat",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "ForEachFile",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Get Metadata Raw",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Get Metadata Raw').output.childItems",
+						"type": "Expression"
+					},
+					"batchCount": 20,
+					"activities": [
+						{
+							"name": "SwitchBasedOnFIleFormat",
+							"type": "Switch",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"on": {
+									"value": "@tolower(last(split(item().name, '.')))",
+									"type": "Expression"
+								},
+								"cases": [
+									{
+										"value": "csv",
+										"activities": [
+											{
+												"name": "Copy CSV",
+												"type": "Copy",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "BinarySource",
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": true
+														},
+														"formatSettings": {
+															"type": "BinaryReadSettings"
+														}
+													},
+													"sink": {
+														"type": "BinarySink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														}
+													},
+													"enableStaging": false
+												},
+												"inputs": [
+													{
+														"referenceName": "DS_SRC_Binary",
+														"type": "DatasetReference",
+														"parameters": {
+															"SRC_Filename": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "DS_Trg_Binary",
+														"type": "DatasetReference",
+														"parameters": {
+															"Trg_Filename": {
+																"value": "@item().name",
+																"type": "Expression"
+															},
+															"Trg_foldername": {
+																"value": "@tolower(last(split(item().name, '.')))",
+																"type": "Expression"
+															}
+														}
+													}
+												]
+											}
+										]
+									},
+									{
+										"value": "json",
+										"activities": [
+											{
+												"name": "Copy json",
+												"type": "Copy",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "BinarySource",
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": true
+														},
+														"formatSettings": {
+															"type": "BinaryReadSettings"
+														}
+													},
+													"sink": {
+														"type": "BinarySink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														}
+													},
+													"enableStaging": false
+												},
+												"inputs": [
+													{
+														"referenceName": "DS_SRC_Binary",
+														"type": "DatasetReference",
+														"parameters": {
+															"SRC_Filename": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "DS_Trg_Binary",
+														"type": "DatasetReference",
+														"parameters": {
+															"Trg_Filename": {
+																"value": "@item().name",
+																"type": "Expression"
+															},
+															"Trg_foldername": {
+																"value": "@tolower(last(split(item().name, '.')))",
+																"type": "Expression"
+															}
+														}
+													}
+												]
+											}
+										]
+									},
+									{
+										"value": "parquet",
+										"activities": [
+											{
+												"name": "Copy parquet",
+												"type": "Copy",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "BinarySource",
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": true
+														},
+														"formatSettings": {
+															"type": "BinaryReadSettings"
+														}
+													},
+													"sink": {
+														"type": "BinarySink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														}
+													},
+													"enableStaging": false
+												},
+												"inputs": [
+													{
+														"referenceName": "DS_SRC_Binary",
+														"type": "DatasetReference",
+														"parameters": {
+															"SRC_Filename": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "DS_Trg_Binary",
+														"type": "DatasetReference",
+														"parameters": {
+															"Trg_Filename": {
+																"value": "@item().name",
+																"type": "Expression"
+															},
+															"Trg_foldername": "@tolower(last(split(item().name, '.')))"
+														}
+													}
+												]
+											}
+										]
+									},
+									{
+										"value": "txt",
+										"activities": [
+											{
+												"name": "Copy txt",
+												"type": "Copy",
+												"dependsOn": [],
+												"policy": {
+													"timeout": "0.12:00:00",
+													"retry": 0,
+													"retryIntervalInSeconds": 30,
+													"secureOutput": false,
+													"secureInput": false
+												},
+												"userProperties": [],
+												"typeProperties": {
+													"source": {
+														"type": "BinarySource",
+														"storeSettings": {
+															"type": "AzureBlobFSReadSettings",
+															"recursive": true
+														},
+														"formatSettings": {
+															"type": "BinaryReadSettings"
+														}
+													},
+													"sink": {
+														"type": "BinarySink",
+														"storeSettings": {
+															"type": "AzureBlobFSWriteSettings"
+														}
+													},
+													"enableStaging": false
+												},
+												"inputs": [
+													{
+														"referenceName": "DS_SRC_Binary",
+														"type": "DatasetReference",
+														"parameters": {
+															"SRC_Filename": {
+																"value": "@item().name",
+																"type": "Expression"
+															}
+														}
+													}
+												],
+												"outputs": [
+													{
+														"referenceName": "DS_Trg_Binary",
+														"type": "DatasetReference",
+														"parameters": {
+															"Trg_Filename": {
+																"value": "@item().name",
+																"type": "Expression"
+															},
+															"Trg_foldername": {
+																"value": "@tolower(last(split(item().name, '.')))",
+																"type": "Expression"
+															}
+														}
+													}
+												]
+											}
+										]
+									}
+								]
+							}
+						}
+					]
+				}
+			}
+		],
+		"annotations": []
+	}
+}

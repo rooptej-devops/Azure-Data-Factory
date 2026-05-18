@@ -1,0 +1,6 @@
+{
+	"name": "QC-On-Prem-IR",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}

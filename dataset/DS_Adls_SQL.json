@@ -1,0 +1,35 @@
+{
+	"name": "DS_Adls_SQL",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_ADLS_GEN2",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"trg_tble_name": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "SQL"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "@dataset().trg_tble_name",
+					"type": "Expression"
+				},
+				"folderPath": "SqlFIles",
+				"fileSystem": "qc-container"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
